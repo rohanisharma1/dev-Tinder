@@ -1,11 +1,20 @@
 const express = require("express");
 const app = express();
-app.use("/hello", (req,res) =>{
-    res.send("Hello from the server!");
+// this handle only get call to /user
+app.get("/user",(req, res)=>{
+   res.send({firstName:"Rohani",lastName :"Sharma"})
+  });
+  app.post("/user",(req, res)=>{
+    console.log(req.body);
+    // saving the data to database.
+    res.send("database test");
+ });
+
+  app.delete("/user",(req,res) =>{
+    res.send("deleted a successfully");
 });
-app.use("/test",(req ,res) =>{
-    res.send("hello helloo");
-});
+//this will match all the  HTTP method API calls to test
+
 app.use("/",(req, res)=>{
     res.send("hi from me!")
 })
