@@ -1,8 +1,8 @@
 const express = require("express");
 const app = express();
 // this handle only get call to /user
-app.get("/user/:userid",(req, res)=>{
-    console.log(req.params);
+app.get("/user",(req, res)=>{
+    console.log("handles the request");
    res.send({firstName:"Rohani",lastName :"Sharma"})
   });
   app.post("/user",(req, res)=>{
@@ -16,9 +16,6 @@ app.get("/user/:userid",(req, res)=>{
 });
 //this will match all the  HTTP method API calls to test
 
-app.use("/",(req, res)=>{
-    res.send("hi from me!")
-})
 
 
 app.listen(7777,() =>{
