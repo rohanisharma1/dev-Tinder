@@ -1,7 +1,8 @@
 const express = require("express");
 const app = express();
 // this handle only get call to /user
-app.get("/user",(req, res)=>{
+app.get("/user/:userid",(req, res)=>{
+    console.log(req.params);
    res.send({firstName:"Rohani",lastName :"Sharma"})
   });
   app.post("/user",(req, res)=>{
