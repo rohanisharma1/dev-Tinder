@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const connectDB = async() =>{
     await mongoose.connect(
-        "mongodb+srv://RohaniSharma_10:santosh10@cluster0.e63o7.mongodb.net/student connect"
+       "mongodb+srv://admin:admin@cluster0.hlcetbh.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
          );
 };
 
@@ -11,6 +11,6 @@ connectDB()
     console.log("Database conection  established");
 })
 .catch((err) =>{
-    console.log("Database cannot be connected ..");
+    console.log("Database cannot be connected ");
 
 });
