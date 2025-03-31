@@ -14,10 +14,21 @@ emailId : {
     required :true,
     unique : true,
     trim : true,
+    validate(value) {
+        if(!validator.isEmail(value)) {
+            throw new Error("Invaild email address" +value );
+        }
+    },
 },
 password :{
     type : String,
     requried :true,
+    validate(value) {
+        if(!validator.isEmail(value)) {
+            throw new Error("Enter new password" +value );
+        }
+    },
+
 },
 age :{
     type: Number,
@@ -33,7 +44,13 @@ gender :{
 },
 photoUrl :{
     type: String,
-    default:"https://rapidapi.com/vikashkhati007/api/random-user-datat"
+    default:"https://rapidapi.com/vikashkhati007/api/random-user-datat",
+    validate(value) {
+        if(!validator.isURL(value)) {
+            throw new Error("Invaild Photo url " +value );
+        }
+    },
+
 },
 about :{
     type :String,
