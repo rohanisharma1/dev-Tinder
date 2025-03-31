@@ -8,7 +8,11 @@ lastName: {
     type : String
 },
 emailId : {
-    type : String
+    type : String,
+    lowercase :true,
+    required :true,
+    unique : true,
+    trim : true,
 },
 password :{
     type : String
