@@ -2,26 +2,104 @@ const express = require("express");
 const connectDB = require("./config/database");
 const app = express();
 const User = require("./models/user.js");
+const{ validateSignUpData } = require("./utilis/validation .js");
+const bcrypt = require('bcrypt');
+const cookieParser = require("cookie-parser");
+const jsonwebtoken = require("jsonwebtoken");
 
 app.use(express.json());
+app.use(cookieParser());
 
 app.post("/signup",async(req,res)=>{
+    try{
+
+    //validate of data
+
+    validateSignUpData(req);
+    const{firstName , lastName,emailId,password} = req.body;
+
+    //Encrpyt the password
+    const passwordHash = await bcrypt.hash(password,7);
+    console.log("passs",passwordHash);
+
 
     // creating a new instance of the User model
-    const user = new User(req.body);
+    const user = new User({
+        firstName,
+        lastName,
+        emailId,
+        password : passwordHash,
+    });
 
-    try{ 
+    
 
        await user.save();
+
         res.send("user add suceesffully");
-    }catch( err){
-        res.status(400).send("error saving the user" + err.message);
+    }catch(err){
+        res.status(400).send("ERROR:" + err.message);
     }
    
 });
+app.post("/login",async(req,res) => {
+    try{
+        const{emailId , password } = req.body;
+        const user = await User.findOne({emailId : emailId});
+        if(!user){
+            throw new Error("Invalid credentials");
+             }
+             const isPasswordValid = await bcrypt.compare(password,user.password);
+        if(isPasswordValid){
+
+         //create a jwt token
+         const token = await jsonwebtoken.sign({_id : user._id} ,"DEV@STUDENT$768");
+         console.log(token);
+
+            //Add the token to cookie and send the respone back to user
+            res.cookie("token", token);
+           res.send("Login Successfully!!!");
+        }else{
+            throw new Error("Password id not correct");
+            
+        }
+            }catch (err){
+                res.status(400).send("ERRROR :" + err.message)
+
+            }
+
+})
+app.get("/profile",async(req,res) => {
+   try{
+    const cookies = req.cookies;
+    const{token} = cookies;
+    if(!token){
+        throw new Error("INVALID TOKEN");
+        
+    }
+
+
+    const decodedmessage = await jsonwebtoken.verify(token,"DEV@STUDENT$768");
+    
+    const {_id} = decodedmessage;
+    
+
+    const user = await User.findById(_id);
+    if(!User){
+        throw new Error("User does not exist");
+        
+    }
+    res.send(user);
+    
+    
+}catch (err){
+    res.status(400).send("ERROR :" +err.message);
+
+}
+})
 
 //get user by email
 app.get("/user",async(req,res) => {
+    
     const userEmail = req.body.emailId;
      
     try{
