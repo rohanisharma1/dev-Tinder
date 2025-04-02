@@ -1,10 +1,12 @@
 const validator = require("validator");
 const validateSignUpData = (req)=> {
-
+    
     console.log("Enter valid")
     const {firstName, lastName, emailId,password} = req.body;
-    console.log("Enter ", req.body,"enter")
-    console.log("name valid",firstName.length )
+    console.log(firstName);
+    
+    console.log("Enter ", req.body,"enter");
+    console.log("name valid",firstName );
 
     if(!firstName || !lastName){
         throw new Error("Name is not valid");
