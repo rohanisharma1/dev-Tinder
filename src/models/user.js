@@ -4,10 +4,14 @@ const validator = require("validator");
 const jsonWebToken  = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 
-const userSchema = new mongoose.Schema({
+const userSchema = new mongoose.Schema(
+    {
     firstName:{
     type : String,
     required :true,
+    index : true,
+    minlength : 2,
+    maxlength : 50,
 },
 
 lastName: {
@@ -41,6 +45,10 @@ age :{
 },
 gender :{
     type : String,
+    enum : {
+        values : ["male" ,"female" ,"other"],
+        message :' {value} is not valid gender type',
+    },
     validate(value){
         if(!["male", "female", "others"].includes(value)) {
             throw new Error("Gender data is not valid")
@@ -69,6 +77,7 @@ skills : {
     timestamps :true,
 }
 );
+
 userSchema.methods.getJWT = async function () {
     const user = this;
 
